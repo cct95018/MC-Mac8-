@@ -13,24 +13,31 @@
     tools:context="com.comp595mc.chi.mc_project02.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ball_8"/>
+
     <TextView
-        android:text="MAGIC 8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:text="@string/MainDisplay"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:id="@+id/DisplayText"
         android:textColor="@android:color/holo_blue_light"
         android:textSize="24sp"
         android:textStyle="normal|bold"
+        android:gravity="center"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center" />
 
     <Button
-        android:text="Press Me!"
+        android:text="@string/PressButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/DoMagic"
-        android:layout_below="@+id/DisplayText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="74dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_below="@id/DisplayText"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

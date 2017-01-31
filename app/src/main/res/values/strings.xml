@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">TheMagic8</string>
     <string name="action_settings">Settings</string>
+    <string name="PressButton">Press Me!</string>
+    <string name="MainDisplay">Magic 8</string>
 </resources>
