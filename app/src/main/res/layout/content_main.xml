@@ -20,11 +20,11 @@
 
     <TextView
         android:text="@string/MainDisplay"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:id="@+id/DisplayText"
         android:textColor="@android:color/holo_blue_light"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="normal|bold"
         android:gravity="center"
         android:layout_centerVertical="true"
