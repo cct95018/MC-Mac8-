@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
             "Outlook not so good",
             "Very doubtful"};
     private Random rand = new Random();
+    private Toast toast;
+    private Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         //Get on screen Button
-        Button btn = (Button) findViewById(R.id.DoMagic);
+        btn = (Button) findViewById(R.id.DoMagic);
         btn.setEnabled(false);
+        btn.setVisibility(View.INVISIBLE);
 //        btn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -81,33 +85,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SetupSensor() {
-        Toast toast;
         mSM = (SensorManager) getSystemService(SENSOR_SERVICE);
         List<Sensor> sensorList = mSM.getSensorList(Sensor.TYPE_ACCELEROMETER);
         if (sensorList.size() > 0){
             accSensor = sensorList.get(0);
-            toast= Toast.makeText(getApplicationContext(), "ACC Sensor FOUND: " + accSensor.getName(), Toast.LENGTH_SHORT);
             hasAcc = true;
+//            toast= Toast.makeText(getApplicationContext(), "ACCELEROMETER Sensor FOUND: " + accSensor.getName(), Toast.LENGTH_SHORT);
         }
-        else{
-            toast = Toast.makeText(getApplicationContext(), "ACC Sensor not found", Toast.LENGTH_SHORT);
+        else {
+            toast = Toast.makeText(getApplicationContext(), "ACCELEROMETER Sensor not found", Toast.LENGTH_SHORT);
+            toast.show();
         }
-        toast.show();
     }
 
     private SensorEventListener accListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
             float z_value = event.values[2];
-            if (z_value >= 0){
-                Log.i("Sensor", "UP");
+            if (z_value >= 3){
                 if (!changeDisplay) {
+                    Log.i("Sensor", "UP" + "[" + String.valueOf(z_value) + "]");
                     changeDisplay = true;
                 }
             }
-            else{
-                Log.i("Sensor", "DOWN");
+            else if(z_value <= -4.5){
                 if (changeDisplay) {
+                    Log.i("Sensor", "DOWN" + "[" + String.valueOf(z_value) + "]");
                     changeDisplay = false;
                     changeDisplay();
                 }
