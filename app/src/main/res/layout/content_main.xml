@@ -14,30 +14,44 @@
     tools:showIn="@layout/activity_main">
 
     <ImageView
+        android:src="@drawable/ball_8"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ball_8"/>
+        />
 
     <TextView
-        android:text="@string/MainDisplay"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
         android:id="@+id/DisplayText"
-        android:textColor="@android:color/holo_blue_light"
-        android:textSize="20sp"
-        android:textStyle="normal|bold"
-        android:gravity="center"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:textAlignment="center" />
+        android:gravity="center"
+        android:text="@string/MainDisplay"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textColor="@android:color/holo_blue_light"
+        android:textStyle="normal|bold" />
 
     <Button
-        android:text="@string/PressButton"
+        android:id="@+id/DoMagic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/DoMagic"
-        android:layout_below="@id/DisplayText"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/DisplayText"
+        android:text="@string/PressButton"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+    <TextView
+        android:id="@+id/PromptText"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/AskQuestion"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="30dp" />
 
 </RelativeLayout>
