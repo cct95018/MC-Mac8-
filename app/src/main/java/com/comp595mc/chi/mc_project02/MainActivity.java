@@ -4,7 +4,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,6 +16,12 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.List;
 import java.util.Random;
 
@@ -47,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
     private Random rand = new Random();
     private Toast toast;
     private Button btn;
+    private Vibrator vib;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +89,13 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         SetupSensor();
-        }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
 
-    private void changeDisplay(){
-        int  r = rand.nextInt(text.length);
+    private void changeDisplay() {
+        int r = rand.nextInt(text.length);
         Log.i("DisplayText", "Index: " + new Integer(r).toString());
         TextView Display = (TextView) findViewById(R.id.DisplayText);
         Display.setText(text[r]);
@@ -87,32 +104,38 @@ public class MainActivity extends AppCompatActivity {
     private void SetupSensor() {
         mSM = (SensorManager) getSystemService(SENSOR_SERVICE);
         List<Sensor> sensorList = mSM.getSensorList(Sensor.TYPE_ACCELEROMETER);
-        if (sensorList.size() > 0){
+        if (sensorList.size() > 0) {
             accSensor = sensorList.get(0);
             hasAcc = true;
 //            toast= Toast.makeText(getApplicationContext(), "ACCELEROMETER Sensor FOUND: " + accSensor.getName(), Toast.LENGTH_SHORT);
-        }
-        else {
+        } else {
             toast = Toast.makeText(getApplicationContext(), "ACCELEROMETER Sensor not found", Toast.LENGTH_SHORT);
             toast.show();
         }
+        vib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
     }
 
     private SensorEventListener accListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
             float z_value = event.values[2];
-            if (z_value >= 3){
+            if (z_value >= 3) {
                 if (!changeDisplay) {
                     Log.i("Sensor", "UP" + "[" + String.valueOf(z_value) + "]");
                     changeDisplay = true;
+                    if(vib.hasVibrator()){
+                        vib.cancel();
+                    }
+
                 }
-            }
-            else if(z_value <= -4.5){
+            } else if (z_value <= -4.5) {
                 if (changeDisplay) {
                     Log.i("Sensor", "DOWN" + "[" + String.valueOf(z_value) + "]");
                     changeDisplay = false;
                     changeDisplay();
+                    if(vib.hasVibrator()){
+                        vib.vibrate(100);
+                    }
                 }
             }
         }
@@ -121,21 +144,28 @@ public class MainActivity extends AppCompatActivity {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     };
+
     @Override
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-        if(hasAcc){
-            mSM.registerListener(accListener, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (hasAcc) {
+            mSM.registerListener(accListener, accSensor, SensorManager.SENSOR_DELAY_FASTEST);
         }
     }
+
     @Override
     protected void onStop() {
         // TODO Auto-generated method stub
-        super.onStop();
-        if(hasAcc){
+        super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
+// See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        if (hasAcc) {
             mSM.unregisterListener(accListener);
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.disconnect();
     }
 
     @Override
@@ -158,5 +188,31 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 }
